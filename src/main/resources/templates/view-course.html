@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- ================= PREMIUM COURSE VIEW STYLES ================= -->
+        <style>
+            #page-content-wrapper {
+                background:
+                    radial-gradient(1200px 600px at 100% -10%, rgba(67,97,238,0.08), transparent 60%),
+                    radial-gradient(900px 500px at -10% 100%, rgba(114,9,183,0.06), transparent 60%),
+                    #f4f6fb;
+                min-height: 100vh;
+            }
+
+            .page-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-bottom: 1.5rem;
+            }
+
+            .page-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                font-size: .72rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: #4361ee;
+                background: rgba(67,97,238,.1);
+                padding: .35rem .7rem;
+                border-radius: 2rem;
+                margin-bottom: .6rem;
+            }
+
+            .page-title {
+                font-size: 1.9rem;
+                font-weight: 700;
+                color: #1e2129;
+                margin: 0;
+                letter-spacing: -0.5px;
+            }
+
+            .page-subtitle {
+                color: #7a8194;
+                font-size: .92rem;
+                margin: .25rem 0 0;
+            }
+
+            .btn-back {
+                background: #fff;
+                border: 1px solid #e3e8f0;
+                color: #475467;
+                font-weight: 500;
+                padding: .65rem 1.1rem;
+                border-radius: .75rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                transition: all .2s ease;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                color: #4361ee;
+                border-color: #dbe4ff;
+                transform: translateY(-1px);
+            }
+
+            /* Detail card */
+            .detail-card {
+                border-radius: 1.25rem;
+                border: 1px solid #eef1f6;
+                background: #fff;
+                overflow: hidden;
+                box-shadow: 0 12px 30px -18px rgba(20, 30, 70, .25);
+            }
+
+            .detail-card .card-header {
+                background: #fff !important;
+                border-bottom: 1px solid #eef1f6;
+                padding: 1.1rem 1.4rem;
+                border-radius: 1.25rem 1.25rem 0 0 !important;
+                display: flex;
+                align-items: center;
+                gap: .55rem;
+            }
+
+            .detail-card .card-header i {
+                width: 32px;
+                height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .6rem;
+                background: rgba(67,97,238,.1);
+                color: #4361ee;
+            }
+
+            .detail-card .card-header span {
+                font-weight: 600;
+                color: #1e2129;
+                font-size: .95rem;
+            }
+
+            .detail-card .card-body { padding: 1.5rem 1.4rem; }
+
+            /* Info rows */
+            .info-grid {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .info-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: .5rem;
+                padding: .9rem 0;
+                border-bottom: 1px dashed #eef1f6;
+            }
+
+            .info-row:last-child { border-bottom: none; }
+
+            .info-label {
+                flex: 0 0 160px;
+                font-size: .72rem;
+                font-weight: 600;
+                color: #94a3b8;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+                padding-top: .2rem;
+            }
+
+            .info-value {
+                flex: 1;
+                color: #1e2129;
+                font-size: .95rem;
+                font-weight: 500;
+                min-width: 200px;
+                word-break: break-word;
+            }
+
+            .info-value p { margin-bottom: 0; }
+
+            /* Badges */
+            .code-badge {
+                display: inline-block;
+                padding: .3rem .75rem;
+                background: #eaf0ff;
+                color: #4361ee;
+                border: 1px solid #dbe4ff;
+                border-radius: 2rem;
+                font-size: .8rem;
+                font-weight: 600;
+                letter-spacing: .3px;
+            }
+
+            .fee-badge {
+                font-weight: 700;
+                color: #0f766e;
+                font-size: 1rem;
+            }
+
+            .status-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: .35rem;
+                padding: .3rem .8rem;
+                border-radius: 2rem;
+                font-size: .78rem;
+                font-weight: 600;
+            }
+
+            .status-active {
+                background: #e8fff6;
+                color: #0f766e;
+                border: 1px solid #b9f0d8;
+            }
+
+            .status-inactive {
+                background: #fff1f1;
+                color: #b42318;
+                border: 1px solid #fcd3d4;
+            }
+
+            .status-dot {
+                width: 7px;
+                height: 7px;
+                border-radius: 50%;
+                background: currentColor;
+            }
+
+            /* Card footer */
+            .detail-card .card-footer {
+                background: #f8fafc !important;
+                border-top: 1px solid #eef1f6;
+                padding: 1rem 1.4rem;
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .btn-edit-course {
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                border: none;
+                color: #fff;
+                font-weight: 600;
+                padding: .65rem 1.3rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                box-shadow: 0 10px 20px -8px rgba(245,158,11,.6);
+                transition: all .25s ease;
+            }
+            .btn-edit-course:hover {
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 14px 26px -10px rgba(245,158,11,.7);
+            }
+
+            @media (max-width: 768px) {
+                .page-title { font-size: 1.5rem; }
+                .info-label { flex: 0 0 100%; }
+                .info-value { min-width: 0; flex: 0 0 100%; }
+            }
+        </style>
+        <!-- ================= /PREMIUM COURSE VIEW STYLES ================= -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <span class="page-eyebrow"><i class="bi bi-book-half"></i> Course</span>
+                    <h2 class="page-title">Course Details</h2>
+                    <p class="page-subtitle">Full information about this course</p>
+                </div>
+                <a th:href="@{/course/list}" class="btn btn-back">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+            <!-- Card -->
+            <div class="card detail-card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-info-circle"></i>
+                    <span>Information</span>
+                </div>
+                <div class="card-body">
+                    <div class="info-grid">
+
+                        <div class="info-row">
+                            <div class="info-label">Course Name</div>
+                            <div class="info-value" th:text="${course.courseName}"></div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Course Code</div>
+                            <div class="info-value">
+                                <span class="code-badge" th:text="${course.courseCode}"></span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Course Fee</div>
+                            <div class="info-value">
+                                <span class="fee-badge" th:text="${course.fee}"></span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Duration</div>
+                            <div class="info-value" th:text="${course.duration}"></div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Is Active</div>
+                            <div class="info-value">
+                                    <span th:if="${course.active}" class="status-badge status-active">
+                                        <span class="status-dot"></span> Yes
+                                    </span>
+                                <span th:unless="${course.active}" class="status-badge status-inactive">
+                                        <span class="status-dot"></span> No
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <div class="info-label">Description</div>
+                            <div class="info-value">
+                                <p th:text="${course.description}"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a th:href="@{'/course/' + ${course.id} + '/edit'}" class="btn btn-edit-course">
+                        <i class="bi bi-pencil"></i> Edit Course
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

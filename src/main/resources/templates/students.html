@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- ================= PREMIUM STUDENT LIST STYLES ================= -->
+        <style>
+            #page-content-wrapper {
+                background:
+                    radial-gradient(1200px 600px at 100% -10%, rgba(67,97,238,0.08), transparent 60%),
+                    radial-gradient(900px 500px at -10% 100%, rgba(114,9,183,0.06), transparent 60%),
+                    #f4f6fb;
+                min-height: 100vh;
+            }
+
+            .page-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-bottom: 1.5rem;
+            }
+
+            .page-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                font-size: .72rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: #4361ee;
+                background: rgba(67,97,238,.1);
+                padding: .35rem .7rem;
+                border-radius: 2rem;
+                margin-bottom: .6rem;
+            }
+
+            .page-title {
+                font-size: 1.9rem;
+                font-weight: 700;
+                color: #1e2129;
+                margin: 0;
+                letter-spacing: -0.5px;
+            }
+
+            .page-subtitle {
+                color: #7a8194;
+                font-size: .92rem;
+                margin: .25rem 0 0;
+            }
+
+            .btn-add {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border: none;
+                color: #fff;
+                font-weight: 600;
+                padding: .7rem 1.2rem;
+                border-radius: .75rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                box-shadow: 0 10px 20px -8px rgba(67,97,238,.6);
+                transition: all .25s ease;
+            }
+            .btn-add:hover {
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 14px 26px -10px rgba(67,97,238,.7);
+            }
+
+            .alert-success {
+                background: #e8fff6;
+                border: 1px solid #b9f0d8;
+                color: #0f766e;
+                border-radius: .9rem;
+                font-weight: 500;
+            }
+
+            .list-card {
+                border-radius: 1.25rem;
+                border: 1px solid #eef1f6;
+                background: #fff;
+                overflow: hidden;
+                box-shadow: 0 12px 30px -18px rgba(20, 30, 70, .25);
+            }
+
+            .list-card .card-header {
+                background: #fff !important;
+                border-bottom: 1px solid #eef1f6;
+                padding: 1.1rem 1.4rem;
+                border-radius: 1.25rem 1.25rem 0 0 !important;
+                display: flex;
+                align-items: center;
+                gap: .55rem;
+            }
+
+            .list-card .card-header i {
+                width: 32px;
+                height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .6rem;
+                background: rgba(67,97,238,.1);
+                color: #4361ee;
+            }
+
+            .list-card .card-header span {
+                font-weight: 600;
+                color: #1e2129;
+                font-size: .95rem;
+            }
+
+            .table thead th {
+                background: #f8fafc;
+                color: #667085;
+                font-size: .72rem;
+                font-weight: 700;
+                letter-spacing: .8px;
+                text-transform: uppercase;
+                border-bottom: 1px solid #eef1f6 !important;
+                padding: .9rem 1rem;
+                white-space: nowrap;
+            }
+
+            .table tbody td {
+                padding: 1rem;
+                color: #344054;
+                font-size: .9rem;
+                border-color: #f2f4f8;
+                vertical-align: middle;
+            }
+
+            .table tbody tr { transition: background .2s ease; }
+            .table tbody tr:hover { background: #f7f9ff; }
+
+            .table tbody td:first-child {
+                font-weight: 600;
+                color: #4361ee;
+            }
+
+            .btn-icon {
+                width: 34px;
+                height: 34px;
+                padding: 0;
+                border-radius: .6rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: 1px solid transparent;
+                transition: all .2s ease;
+            }
+
+            .btn-view {
+                background: #eaf0ff;
+                color: #4361ee !important;
+                border-color: #dbe4ff;
+            }
+            .btn-view:hover {
+                background: #4361ee;
+                color: #fff !important;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px -6px rgba(67,97,238,.5);
+            }
+
+            .btn-edit {
+                background: #fff4e5;
+                color: #b45309 !important;
+                border-color: #fde3c2;
+            }
+            .btn-edit:hover {
+                background: #f59e0b;
+                color: #fff !important;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px -6px rgba(245,158,11,.5);
+            }
+
+            .empty-state {
+                text-align: center;
+                padding: 3.5rem 1rem;
+                color: #94a3b8;
+            }
+            .empty-state i {
+                font-size: 3rem;
+                display: block;
+                margin-bottom: .75rem;
+                opacity: .5;
+            }
+            .empty-state p { font-size: .95rem; margin-bottom: 0; }
+
+            .pagination {
+                gap: .35rem;
+                margin-top: 1rem;
+                margin-bottom: 0;
+            }
+
+            .pagination .page-link {
+                border: 1px solid #eef1f6;
+                border-radius: .6rem !important;
+                color: #475467;
+                font-size: .85rem;
+                font-weight: 500;
+                padding: .45rem .85rem;
+                background: #fff;
+                transition: all .2s ease;
+            }
+
+            .pagination .page-link:hover {
+                background: #eaf0ff;
+                color: #4361ee;
+                border-color: #dbe4ff;
+            }
+
+            .pagination .page-item.active .page-link {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border-color: transparent;
+                color: #fff;
+                box-shadow: 0 8px 16px -8px rgba(67,97,238,.6);
+            }
+
+            .pagination .page-item.disabled .page-link {
+                color: #cbd5e1;
+                background: #f8fafc;
+                border-color: #eef1f6;
+            }
+
+            @media (max-width: 768px) {
+                .page-title { font-size: 1.5rem; }
+            }
+        </style>
+        <!-- ================= /PREMIUM STUDENT LIST STYLES ================= -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <span class="page-eyebrow"><i class="bi bi-people-fill"></i> Student Management</span>
+                    <h2 class="page-title">Students</h2>
+                    <p class="page-subtitle">Manage all students in the system</p>
+                </div>
+                <a th:href="@{/students/new}" class="btn btn-add">
+                    <i class="bi bi-plus-lg"></i> Add New Student
+                </a>
+            </div>
+
+            <!-- Success alert -->
+            <div th:if="${message}" class="alert alert-success text-center" role="alert" th:text="${message}"></div>
+
+            <!-- List card -->
+            <div class="card list-card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-table"></i>
+                    <span>Student List</span>
+                </div>
+                <div class="card-body">
+
+                    <!-- Empty state -->
+                    <div class="empty-state" th:if="${students.content.isEmpty()}">
+                        <i class="bi bi-inbox"></i>
+                        <p>No students found</p>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive" th:if="${!students.content.isEmpty()}">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="student : ${students.content}">
+                                <td data-label="ID" th:text="${student.id}"></td>
+                                <td data-label="Name" th:text="|${student.firstName} ${student.lastName}|"></td>
+                                <td data-label="Email" th:text="${student.email}"></td>
+                                <td data-label="Phone" th:text="${student.phoneNumber}"></td>
+                                <td data-label="Actions" class="text-end">
+                                    <a th:href="@{/students/{id}(id=${student.id})}"
+                                       class="btn btn-sm btn-icon btn-view me-1" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a th:href="@{/students/{id}/edit(id=${student.id})}"
+                                       class="btn btn-sm btn-icon btn-edit" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination (logic same) -->
+                    <nav aria-label="Course pagination">
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item" th:classappend="${students.first} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/students/list'(page=${students.first ? 0 : students.number -1}, size=${students.size})}">
+                                    Previous
+                                </a>
+                            </li>
+                            <li class="page-item"
+                                th:each="pageNum : ${#numbers.sequence(0, students.totalPages-1)}"
+                                th:classappend="${pageNum} == ${students.number} ? 'active' : ''">
+                                <a class="page-link"
+                                   th:href="@{'/students/list'(page=${pageNum}, size=${students.size})}"
+                                   th:text="${pageNum + 1}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${students.last} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/students/list'(page=${students.last ? students.number : students.number + 1}, size=${students.size})}">
+                                    Next
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

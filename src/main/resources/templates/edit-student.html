@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- ================= PREMIUM UPDATE STUDENT STYLES ================= -->
+        <style>
+            #page-content-wrapper {
+                background:
+                    radial-gradient(1200px 600px at 100% -10%, rgba(245,158,11,0.08), transparent 60%),
+                    radial-gradient(900px 500px at -10% 100%, rgba(67,97,238,0.06), transparent 60%),
+                    #f4f6fb;
+                min-height: 100vh;
+            }
+
+            .page-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-end;
+                gap: 1rem;
+                flex-wrap: wrap;
+                margin-bottom: 1.5rem;
+            }
+
+            .page-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                font-size: .72rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                color: #b45309;
+                background: rgba(245,158,11,.12);
+                padding: .35rem .7rem;
+                border-radius: 2rem;
+                margin-bottom: .6rem;
+            }
+
+            .page-title {
+                font-size: 1.9rem;
+                font-weight: 700;
+                color: #1e2129;
+                margin: 0;
+                letter-spacing: -0.5px;
+            }
+
+            .page-subtitle {
+                color: #7a8194;
+                font-size: .92rem;
+                margin: .25rem 0 0;
+            }
+
+            .btn-back {
+                background: #fff;
+                border: 1px solid #e3e8f0;
+                color: #475467;
+                font-weight: 500;
+                padding: .65rem 1.1rem;
+                border-radius: .75rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                transition: all .2s ease;
+            }
+            .btn-back:hover {
+                background: #f8fafc;
+                color: #4361ee;
+                border-color: #dbe4ff;
+                transform: translateY(-1px);
+            }
+
+            .form-card {
+                border-radius: 1.25rem;
+                border: 1px solid #eef1f6;
+                background: #fff;
+                overflow: hidden;
+                box-shadow: 0 12px 30px -18px rgba(20, 30, 70, .25);
+            }
+
+            .form-card .card-header {
+                background: #fff !important;
+                border-bottom: 1px solid #eef1f6;
+                padding: 1.1rem 1.4rem;
+                border-radius: 1.25rem 1.25rem 0 0 !important;
+                display: flex;
+                align-items: center;
+                gap: .55rem;
+            }
+
+            .form-card .card-header i {
+                width: 32px;
+                height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .6rem;
+                background: rgba(245,158,11,.12);
+                color: #d97706;
+            }
+
+            .form-card .card-header span {
+                font-weight: 600;
+                color: #1e2129;
+                font-size: .95rem;
+            }
+
+            .form-card .card-body { padding: 1.8rem; }
+
+            .form-label {
+                font-size: .78rem;
+                font-weight: 600;
+                color: #667085;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+                margin-bottom: .45rem;
+            }
+
+            .form-control,
+            .form-select {
+                border-radius: .7rem;
+                border: 1px solid #e3e8f0;
+                padding: .7rem .95rem;
+                font-size: .92rem;
+                background: #fbfcff;
+                transition: all .2s ease;
+            }
+
+            .form-control::placeholder { color: #b3bac9; }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: #f59e0b;
+                background: #fff;
+                box-shadow: 0 0 0 4px rgba(245,158,11,.15);
+            }
+
+            .form-control.is-invalid {
+                border-color: #e5484d;
+                background: #fff8f8;
+            }
+
+            .invalid-feedback {
+                color: #e5484d;
+                font-size: .78rem;
+                font-weight: 500;
+                margin-top: .35rem;
+            }
+
+            textarea.form-control {
+                min-height: 95px;
+                resize: vertical;
+            }
+
+            .form-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: .6rem;
+                margin-top: 1.8rem;
+                padding-top: 1.5rem;
+                border-top: 1px solid #eef1f6;
+            }
+
+            .btn-reset {
+                background: #f4f6fb;
+                border: 1px solid #e3e8f0;
+                color: #475467;
+                font-weight: 500;
+                padding: .65rem 1.3rem;
+                border-radius: .7rem;
+                transition: all .2s ease;
+            }
+            .btn-reset:hover {
+                background: #eef1f6;
+                color: #1e2129;
+            }
+
+            .btn-update {
+                background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+                border: none;
+                color: #fff;
+                font-weight: 600;
+                padding: .65rem 1.4rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                box-shadow: 0 10px 20px -8px rgba(245,158,11,.6);
+                transition: all .25s ease;
+            }
+            .btn-update:hover {
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 14px 26px -10px rgba(245,158,11,.7);
+            }
+
+            @media (max-width: 768px) {
+                .page-title { font-size: 1.5rem; }
+                .form-card .card-body { padding: 1.2rem; }
+                .form-actions { flex-direction: column-reverse; }
+                .form-actions .btn { width: 100%; justify-content: center; }
+            }
+        </style>
+        <!-- ================= /PREMIUM UPDATE STUDENT STYLES ================= -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- Header -->
+            <div class="page-header">
+                <div>
+                    <span class="page-eyebrow"><i class="bi bi-pencil-square"></i> Edit Student</span>
+                    <h2 class="page-title">Update Student</h2>
+                    <p class="page-subtitle">Modify the student details and save changes</p>
+                </div>
+                <a th:href="@{/students/list}" class="btn btn-back">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+
+            <!-- Form card -->
+            <div class="card form-card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-person-vcard"></i>
+                    <span>Student Details</span>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/students/{id}/update(id=${studentDto.id})}" th:object="${studentDto}" method="post">
+
+                        <div class="row mb-3 g-3">
+                            <div class="col-md-6">
+                                <label for="firstName" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName"
+                                       th:field="*{firstName}"
+                                       th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                       placeholder="e.g. John">
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('firstName')}"
+                                     th:errors="*{firstName}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="lastName" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName"
+                                       th:field="*{lastName}"
+                                       th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                       placeholder="e.g. Doe">
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('lastName')}"
+                                     th:errors="*{lastName}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 g-3">
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email"
+                                       th:field="*{email}"
+                                       th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                       placeholder="e.g. john.doe@example.com">
+
+                                <div class="invalid-feedback"
+                                     th:if="${#fields.hasErrors('email')}"
+                                     th:errors="*{email}">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone"
+                                       th:field="*{phoneNumber}"
+                                       placeholder="e.g. +1 234 567 8900">
+                            </div>
+                        </div>
+
+                        <div class="row mb-3 g-3">
+                            <div class="col-md-6">
+                                <label for="isActive" class="form-label">Is Active</label>
+                                <select id="isActive" class="form-select" th:field="*{active}">
+                                    <option th:value="true">Yes</option>
+                                    <option th:value="false">No</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <textarea class="form-control" id="address" rows="3"
+                                      th:field="*{address}"
+                                      th:classappend="${#fields.hasErrors('address')} ? 'is-invalid' : ''"
+                                      placeholder="Enter full address..."></textarea>
+
+                            <div class="invalid-feedback"
+                                 th:if="${#fields.hasErrors('address')}"
+                                 th:errors="*{address}">
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="reset" class="btn btn-reset">Reset</button>
+                            <button type="submit" class="btn btn-update">
+                                <i class="bi bi-save"></i> Update Student
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>

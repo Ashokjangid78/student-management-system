@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- ================= PREMIUM ENROLL STYLES ================= -->
+        <style>
+            #page-content-wrapper {
+                background:
+                    radial-gradient(1200px 600px at 100% -10%, rgba(67,97,238,0.08), transparent 60%),
+                    radial-gradient(900px 500px at -10% 100%, rgba(114,9,183,0.06), transparent 60%),
+                    #f4f6fb;
+                min-height: 100vh;
+            }
+
+            /* Hero banner */
+            .enroll-hero {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border-radius: 1.25rem;
+                padding: 1.6rem 1.8rem;
+                color: #fff;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 18px 34px -18px rgba(67,97,238,.6);
+                margin-bottom: 1.5rem;
+            }
+            .enroll-hero::before {
+                content: "";
+                position: absolute;
+                right: -60px;
+                top: -60px;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.08);
+            }
+            .enroll-hero::after {
+                content: "";
+                position: absolute;
+                right: 60px;
+                bottom: -70px;
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.06);
+            }
+
+            .hero-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                font-size: .72rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                background: rgba(255,255,255,.18);
+                padding: .3rem .65rem;
+                border-radius: 2rem;
+                margin-bottom: .6rem;
+            }
+
+            .hero-title {
+                font-size: 1.7rem;
+                font-weight: 700;
+                margin: 0;
+                letter-spacing: -0.5px;
+            }
+
+            .hero-subtitle {
+                margin: .25rem 0 0;
+                opacity: .85;
+                font-size: .9rem;
+            }
+
+            .btn-hero-back {
+                background: rgba(255,255,255,.95);
+                color: #4361ee;
+                border: none;
+                font-weight: 600;
+                padding: .6rem 1.1rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                position: relative;
+                z-index: 1;
+                transition: all .2s ease;
+            }
+            .btn-hero-back:hover {
+                background: #fff;
+                color: #3a0ca3;
+                transform: translateY(-1px);
+            }
+
+            /* Alerts */
+            .alert-success {
+                background: #e8fff6;
+                border: 1px solid #b9f0d8;
+                color: #0f766e;
+                border-radius: .9rem;
+                font-weight: 500;
+            }
+            .alert-danger {
+                background: #fff1f1;
+                border: 1px solid #fcd3d4;
+                color: #b42318;
+                border-radius: .9rem;
+                font-weight: 500;
+            }
+
+            /* Cards */
+            .enroll-card {
+                border-radius: 1.25rem;
+                border: 1px solid #eef1f6;
+                background: #fff;
+                overflow: hidden;
+                box-shadow: 0 12px 30px -18px rgba(20, 30, 70, .25);
+            }
+
+            .enroll-card .card-header {
+                background: #fff !important;
+                border-bottom: 1px solid #eef1f6;
+                padding: 1.1rem 1.4rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: .55rem;
+            }
+
+            .enroll-card .card-header i {
+                width: 32px;
+                height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .6rem;
+                background: rgba(67,97,238,.1);
+                color: #4361ee;
+                margin-right: .4rem;
+            }
+
+            .enroll-card .card-header span.title {
+                font-weight: 600;
+                color: #1e2129;
+                font-size: .95rem;
+            }
+
+            .enroll-card .card-header .small {
+                color: #94a3b8 !important;
+                font-size: .78rem;
+            }
+
+            /* Table */
+            .table thead th {
+                background: #f8fafc;
+                color: #667085;
+                font-size: .72rem;
+                font-weight: 700;
+                letter-spacing: .8px;
+                text-transform: uppercase;
+                border-bottom: 1px solid #eef1f6 !important;
+                padding: .9rem 1rem;
+            }
+
+            .table tbody td {
+                padding: 1rem;
+                color: #344054;
+                font-size: .9rem;
+                border-color: #f2f4f8;
+                vertical-align: middle;
+            }
+
+            .table tbody tr { transition: background .2s ease; }
+            .table tbody tr:hover { background: #f7f9ff; }
+
+            .form-check-input {
+                width: 1.15rem;
+                height: 1.15rem;
+                border-radius: .35rem;
+                border: 1.5px solid #cdd5e0;
+                cursor: pointer;
+                transition: all .15s ease;
+            }
+
+            .form-check-input:checked {
+                background-color: #4361ee;
+                border-color: #4361ee;
+                box-shadow: 0 4px 10px -4px rgba(67,97,238,.6);
+            }
+
+            .form-check-input:focus {
+                box-shadow: 0 0 0 4px rgba(67,97,238,.15);
+                border-color: #4361ee;
+            }
+
+            /* Summary panel */
+            .summary-block {
+                background: #f8fafc;
+                border: 1px solid #eef1f6;
+                border-radius: .9rem;
+                padding: 1rem 1.1rem;
+            }
+
+            .summary-label {
+                color: #94a3b8;
+                font-size: .74rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+            }
+
+            .summary-value {
+                color: #1e2129;
+                font-weight: 600;
+                font-size: .95rem;
+            }
+
+            .fee-highlight {
+                color: #4361ee;
+                font-weight: 700;
+            }
+
+            #selectedCourses {
+                padding-left: 0;
+                list-style: none;
+                max-height: 160px;
+                overflow-y: auto;
+                margin-bottom: 0;
+            }
+
+            #selectedCourses li {
+                padding: .5rem .75rem;
+                background: #f8fafc;
+                border: 1px solid #eef1f6;
+                border-radius: .55rem;
+                font-size: .85rem;
+                color: #344054;
+                margin-bottom: .4rem;
+                display: flex;
+                justify-content: space-between;
+                gap: .5rem;
+            }
+
+            #selectedCourses li:only-child {
+                justify-content: center;
+                color: #94a3b8;
+                font-style: italic;
+            }
+
+            /* Select */
+            .form-select {
+                border-radius: .7rem;
+                border: 1px solid #e3e8f0;
+                padding: .7rem .95rem;
+                font-size: .92rem;
+                background: #fbfcff;
+                transition: all .2s ease;
+            }
+            .form-select:focus {
+                border-color: #4361ee;
+                background: #fff;
+                box-shadow: 0 0 0 4px rgba(67,97,238,.12);
+            }
+            .form-select.is-invalid {
+                border-color: #e5484d;
+                background: #fff8f8;
+            }
+
+            .form-label {
+                font-size: .78rem;
+                font-weight: 600;
+                color: #667085;
+                text-transform: uppercase;
+                letter-spacing: .5px;
+                margin-bottom: .45rem;
+            }
+
+            .invalid-feedback {
+                color: #e5484d;
+                font-size: .78rem;
+                font-weight: 500;
+                margin-top: .35rem;
+            }
+
+            /* Action buttons */
+            .btn-cancel {
+                background: #f4f6fb;
+                border: 1px solid #e3e8f0;
+                color: #475467;
+                font-weight: 500;
+                padding: .65rem 1.1rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: .4rem;
+                transition: all .2s ease;
+            }
+            .btn-cancel:hover {
+                background: #eef1f6;
+                color: #1e2129;
+            }
+
+            .btn-enroll {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border: none;
+                color: #fff;
+                font-weight: 600;
+                padding: .65rem 1.2rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: .4rem;
+                box-shadow: 0 10px 20px -8px rgba(67,97,238,.6);
+                transition: all .25s ease;
+            }
+            .btn-enroll:hover {
+                color: #fff;
+                transform: translateY(-2px);
+                box-shadow: 0 14px 26px -10px rgba(67,97,238,.7);
+            }
+
+            @media (max-width: 768px) {
+                .hero-title { font-size: 1.4rem; }
+                .enroll-hero { padding: 1.3rem; }
+            }
+        </style>
+        <!-- ================= /PREMIUM ENROLL STYLES ================= -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- Hero -->
+            <div class="enroll-hero">
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                    <div>
+                        <span class="hero-eyebrow"><i class="bi bi-journal-check"></i> Enrollment</span>
+                        <h2 class="hero-title">Enroll Student to Courses</h2>
+                        <p class="hero-subtitle">Select courses, choose a student, and confirm enrollment</p>
+                    </div>
+                    <a th:href="@{/students/list}" class="btn btn-hero-back">
+                        <i class="bi bi-arrow-left"></i> Back to Students
+                    </a>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div th:if="${successMessage}" class="alert alert-success" role="alert" th:text="${successMessage}"></div>
+
+            <!-- Error Message -->
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert" th:text="${errorMessage}"></div>
+
+            <form th:action="@{/enrollments/enrollCourse}" th:object="${enrollmentDto}" method="post">
+                <div class="row g-4">
+
+                    <!-- Left: Course selection -->
+                    <div class="col-lg-8">
+                        <div class="card enroll-card h-100">
+                            <div class="card-header">
+                                <span class="title"><i class="bi bi-list-check"></i> Course Selection</span>
+                                <span class="small text-muted">Multi-select allowed</span>
+                            </div>
+                            <div class="card-body p-0">
+
+                                <div class="px-4 pt-3">
+                                    <div class="invalid-feedback d-block"
+                                         th:if="${#fields.hasErrors('courseIds')}"
+                                         th:errors="*{courseIds}">
+                                    </div>
+                                </div>
+
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead>
+                                        <tr>
+                                            <th style="width: 60px;">Select</th>
+                                            <th>Course Name</th>
+                                            <th class="text-end">Fee</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="course : ${courseList}">
+                                            <td data-label="Select">
+                                                <div class="form-check">
+                                                    <input class="form-check-input course-checkbox" type="checkbox"
+                                                           th:field="*{courseIds}"
+                                                           th:value="${course.id}"
+                                                           th:id="|course-${course.id}|"
+                                                           th:data-fee="${course.fee}"
+                                                           th:data-name="${course.courseName}">
+                                                </div>
+                                            </td>
+                                            <td data-label="Course Name"
+                                                th:for="|course-${course.id}|"
+                                                th:text="${course.courseName}"></td>
+                                            <td data-label="Fee" class="text-end fee-highlight"
+                                                th:text="${'Rs.' + #numbers.formatDecimal(course.fee, 1, 'COMMA', 2, 'POINT')}"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Student + Summary -->
+                    <div class="col-lg-4">
+                        <div class="card enroll-card h-100">
+                            <div class="card-header">
+                                <span class="title"><i class="bi bi-person-check"></i> Student &amp; Summary</span>
+                            </div>
+                            <div class="card-body d-flex flex-column gap-3">
+
+                                <div>
+                                    <label for="studentSelect" class="form-label">Select Student</label>
+                                    <select id="studentSelect" class="form-select mb-2"
+                                            th:field="*{studentId}"
+                                            th:classappend="${#fields.hasErrors('studentId')} ? 'is-invalid' : ''">
+                                        <option value="" selected>Select a student</option>
+                                        <option th:each="student : ${studentList}"
+                                                th:value="${student.id}"
+                                                th:data-name="${student.firstName + ' ' + student.lastName}"
+                                                th:data-email="${student.email}"
+                                                th:text="${student.firstName + ' ' + student.lastName + ' (' + student.email + ')'}">
+                                        </option>
+                                    </select>
+                                    <div class="invalid-feedback d-block"
+                                         th:if="${#fields.hasErrors('studentId')}"
+                                         th:errors="*{studentId}">
+                                    </div>
+                                    <div class="summary-block mt-2">
+                                        <div class="summary-label">Selected Student</div>
+                                        <div class="summary-value" id="selectedStudent"></div>
+                                        <div class="small text-muted" id="selectedEmail"></div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-block">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="summary-label">Courses Selected</span>
+                                        <strong class="summary-value" id="selectedCourseCount"></strong>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                        <span class="summary-label">Total Fee</span>
+                                        <strong class="fee-highlight" id="totalfees"></strong>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="summary-label mb-2">Selected Courses</div>
+                                    <ul id="selectedCourses">
+                                        <li>No course selected</li>
+                                    </ul>
+                                    <div class="d-flex flex-wrap gap-2 mt-3">
+                                        <button type="button" class="btn btn-cancel flex-grow-1">
+                                            <i class="bi bi-arrow-left"></i> Cancel
+                                        </button>
+                                        <button type="submit" class="btn btn-enroll flex-grow-1">
+                                            <i class="bi bi-check2-circle"></i> Enroll
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+
+<script th:inline="javascript">
+    const checkboxes = document.querySelectorAll(".course-checkbox");
+    const selectedCourseCount = document.getElementById("selectedCourseCount");
+    const totalfees = document.getElementById("totalfees");
+    const selectedCourses = document.getElementById("selectedCourses");
+    const selectedStudent  = document.getElementById("selectedStudent");
+    const selectedEmail = document.getElementById("selectedEmail");
+    const studentSelect = document.getElementById("studentSelect");
+
+    function updateSummary() {
+        let selected = [];
+        let total = 0;
+        checkboxes.forEach(cb => {
+            if(cb.checked) {
+                selected.push({
+                    name: cb.dataset.name,
+                    fee: cb.dataset.fee
+                })
+
+                const fee = parseFloat(cb.dataset.fee || "0")
+                total = total + fee;
+            }
+
+        });
+
+        selectedCourseCount.textContent = selected.length.toString();
+        totalfees.textContent = "Rs."+ total;
+
+        selectedCourses.innerHTML = "";
+        if(selected.length == 0) {
+            selectedCourses.innerHTML = "<li>No course selected</li>";
+        } else {
+            selected.forEach(item => {
+                const li = document.createElement("li");
+                li.textContent = `${item.name} Rs.${item.fee}`
+                selectedCourses.appendChild(li);
+            });
+        }
+    }
+
+    function updateStudent() {
+        const studentValues = studentSelect && studentSelect.value ? studentSelect.options[studentSelect.selectedIndex] : null;
+        selectedStudent.textContent = studentValues ? studentValues.dataset.name : '';
+        selectedEmail.textContent = studentValues ? studentValues.dataset.email : '';
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        checkboxes.forEach(cb => cb.addEventListener("change", updateSummary))
+
+        if(studentSelect) {
+            studentSelect.addEventListener("change", updateStudent)
+        }
+    });
+</script>
+
+</body>
+
+</html>

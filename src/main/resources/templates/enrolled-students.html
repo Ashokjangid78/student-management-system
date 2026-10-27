@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/layout :: head}"></head>
+
+<body>
+<div class="d-flex" id="wrapper">
+    <!-- Sidebar -->
+    <div th:replace="~{fragments/layout :: sidebar}"></div>
+
+    <!-- Page Content -->
+    <div id="page-content-wrapper">
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+
+        <!-- ================= PREMIUM ENROLLMENT LIST STYLES ================= -->
+        <style>
+            #page-content-wrapper {
+                background:
+                    radial-gradient(1200px 600px at 100% -10%, rgba(67,97,238,0.08), transparent 60%),
+                    radial-gradient(900px 500px at -10% 100%, rgba(114,9,183,0.06), transparent 60%),
+                    #f4f6fb;
+                min-height: 100vh;
+            }
+
+            /* Hero */
+            .enroll-hero {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border-radius: 1.25rem;
+                padding: 1.6rem 1.8rem;
+                color: #fff;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 18px 34px -18px rgba(67,97,238,.6);
+                margin-bottom: 1.5rem;
+            }
+            .enroll-hero::before {
+                content: "";
+                position: absolute;
+                right: -60px;
+                top: -60px;
+                width: 220px;
+                height: 220px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.08);
+            }
+            .enroll-hero::after {
+                content: "";
+                position: absolute;
+                right: 60px;
+                bottom: -70px;
+                width: 160px;
+                height: 160px;
+                border-radius: 50%;
+                background: rgba(255,255,255,.06);
+            }
+
+            .hero-eyebrow {
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                font-size: .72rem;
+                font-weight: 600;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                background: rgba(255,255,255,.18);
+                padding: .3rem .65rem;
+                border-radius: 2rem;
+                margin-bottom: .6rem;
+            }
+
+            .hero-title {
+                font-size: 1.7rem;
+                font-weight: 700;
+                margin: 0;
+                letter-spacing: -0.5px;
+            }
+
+            .hero-subtitle {
+                margin: .35rem 0 0;
+                opacity: .85;
+                font-size: .9rem;
+            }
+
+            .btn-hero-primary {
+                background: rgba(255,255,255,.95);
+                color: #4361ee;
+                border: none;
+                font-weight: 600;
+                padding: .6rem 1.1rem;
+                border-radius: .7rem;
+                display: inline-flex;
+                align-items: center;
+                gap: .4rem;
+                position: relative;
+                z-index: 1;
+                transition: all .2s ease;
+            }
+            .btn-hero-primary:hover {
+                background: #fff;
+                color: #3a0ca3;
+                transform: translateY(-1px);
+            }
+
+            /* Alert */
+            .alert-success {
+                background: #e8fff6;
+                border: 1px solid #b9f0d8;
+                color: #0f766e;
+                border-radius: .9rem;
+                font-weight: 500;
+            }
+
+            /* Card */
+            .list-card {
+                border-radius: 1.25rem;
+                border: 1px solid #eef1f6;
+                background: #fff;
+                overflow: hidden;
+                box-shadow: 0 12px 30px -18px rgba(20, 30, 70, .25);
+            }
+
+            .list-card .card-header {
+                background: #fff !important;
+                border-bottom: 1px solid #eef1f6;
+                padding: 1.1rem 1.4rem;
+                border-radius: 1.25rem 1.25rem 0 0 !important;
+                display: flex;
+                align-items: center;
+                gap: .55rem;
+            }
+
+            .list-card .card-header i {
+                width: 32px;
+                height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: .6rem;
+                background: rgba(67,97,238,.1);
+                color: #4361ee;
+            }
+
+            .list-card .card-header span {
+                font-weight: 600;
+                color: #1e2129;
+                font-size: .95rem;
+            }
+
+            /* Table */
+            .table thead th {
+                background: #f8fafc;
+                color: #667085;
+                font-size: .72rem;
+                font-weight: 700;
+                letter-spacing: .8px;
+                text-transform: uppercase;
+                border-bottom: 1px solid #eef1f6 !important;
+                padding: .9rem 1rem;
+                white-space: nowrap;
+            }
+
+            .table tbody td {
+                padding: 1rem;
+                color: #344054;
+                font-size: .9rem;
+                border-color: #f2f4f8;
+                vertical-align: middle;
+            }
+
+            .table tbody tr { transition: background .2s ease; }
+            .table tbody tr:hover { background: #f7f9ff; }
+
+            .table tbody td:first-child {
+                font-weight: 600;
+                color: #4361ee;
+            }
+
+            /* Course count pill */
+            .count-pill {
+                display: inline-block;
+                padding: .25rem .65rem;
+                background: #eaf0ff;
+                color: #4361ee;
+                border: 1px solid #dbe4ff;
+                border-radius: 2rem;
+                font-size: .78rem;
+                font-weight: 600;
+            }
+
+            /* Fee */
+            .fee-text {
+                font-weight: 600;
+                color: #0f766e;
+            }
+
+            /* View button */
+            .btn-action {
+                width: 34px;
+                height: 34px;
+                padding: 0;
+                border-radius: .6rem;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: #eaf0ff;
+                color: #4361ee !important;
+                border: 1px solid #dbe4ff;
+                transition: all .2s ease;
+            }
+            .btn-action:hover {
+                background: #4361ee;
+                color: #fff !important;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px -6px rgba(67,97,238,.5);
+            }
+
+            /* Empty */
+            .empty-state {
+                text-align: center;
+                padding: 3.5rem 1rem;
+                color: #94a3b8;
+            }
+            .empty-state i {
+                font-size: 3rem;
+                display: block;
+                margin-bottom: .75rem;
+                opacity: .5;
+            }
+            .empty-state p { font-size: .95rem; margin-bottom: 0; }
+
+            /* Pagination */
+            .pagination {
+                gap: .35rem;
+                margin-top: 1rem;
+                margin-bottom: 0;
+            }
+
+            .pagination .page-link {
+                border: 1px solid #eef1f6;
+                border-radius: .6rem !important;
+                color: #475467;
+                font-size: .85rem;
+                font-weight: 500;
+                padding: .45rem .85rem;
+                background: #fff;
+                transition: all .2s ease;
+            }
+
+            .pagination .page-link:hover {
+                background: #eaf0ff;
+                color: #4361ee;
+                border-color: #dbe4ff;
+            }
+
+            .pagination .page-item.active .page-link {
+                background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+                border-color: transparent;
+                color: #fff;
+                box-shadow: 0 8px 16px -8px rgba(67,97,238,.6);
+            }
+
+            .pagination .page-item.disabled .page-link {
+                color: #cbd5e1;
+                background: #f8fafc;
+                border-color: #eef1f6;
+            }
+
+            @media (max-width: 768px) {
+                .hero-title { font-size: 1.4rem; }
+                .enroll-hero { padding: 1.3rem; }
+            }
+        </style>
+        <!-- ================= /PREMIUM ENROLLMENT LIST STYLES ================= -->
+
+        <div class="container-fluid px-4 py-4">
+
+            <!-- Hero -->
+            <div class="enroll-hero">
+                <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3">
+                    <div>
+                        <span class="hero-eyebrow"><i class="bi bi-people-fill"></i> Enrollments</span>
+                        <h2 class="hero-title">Students Enrolled in Courses</h2>
+                        <p class="hero-subtitle">Track enrollment coverage, fees, and quick access to details.</p>
+                    </div>
+                    <a href="enroll-course.html" class="btn btn-hero-primary">
+                        <i class="bi bi-plus-lg"></i> Enroll Student
+                    </a>
+                </div>
+            </div>
+
+            <!-- Success Alert -->
+            <div th:if="${message}" class="alert alert-success text-center" role="alert" th:text="${message}"></div>
+
+            <!-- Card -->
+            <div class="card list-card mb-4">
+                <div class="card-header">
+                    <i class="bi bi-table"></i>
+                    <span>Enrolled Students</span>
+                </div>
+                <div class="card-body">
+
+                    <!-- Empty (logic same) -->
+                    <div class="empty-state" th:if="${students.content.isEmpty()}">
+                        <i class="bi bi-inbox"></i>
+                        <p>No course found</p>
+                    </div>
+
+                    <!-- Table (logic same) -->
+                    <div class="table-responsive" th:if="${!students.content.isEmpty()}">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Courses Count</th>
+                                <th>Total Fee</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="student : ${students.content}">
+                                <td data-label="ID" th:text="${student.studentId}"></td>
+                                <td data-label="Name" th:text="${student.studentName}"></td>
+                                <td data-label="Email" th:text="${student.email}"></td>
+                                <td data-label="Courses Count">
+                                    <span class="count-pill" th:text="${student.courseCount}"></span>
+                                </td>
+                                <td data-label="Total Fee">
+                                    <span class="fee-text" th:text="${student.totalFee}"></span>
+                                </td>
+                                <td data-label="Actions" class="text-end">
+                                    <a th:href="@{/enrollments/getStudentEnrollmentDetails/{id}(id=${student.studentId}, source='enrollments')}"
+                                       class="btn btn-sm btn-action" title="View">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination (logic same) -->
+                    <nav aria-label="Course pagination">
+                        <ul class="pagination justify-content-end">
+
+                            <!-- Previous -->
+                            <li class="page-item" th:classappend="${students.first} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/enrollments/enrollmentList'(page=${students.first ? 0 : students.number -1}, size=${students.size})}">
+                                    Previous
+                                </a>
+                            </li>
+
+                            <!-- Page numbers -->
+                            <li class="page-item"
+                                th:each="pageNum : ${#numbers.sequence(0, students.totalPages-1)}"
+                                th:classappend="${pageNum} == ${students.number} ? 'active' : ''">
+                                <a class="page-link"
+                                   th:href="@{'/enrollments/enrollmentList'(page=${pageNum}, size=${students.size})}"
+                                   th:text="${pageNum + 1}"></a>
+                            </li>
+
+                            <!-- Next -->
+                            <li class="page-item" th:classappend="${students.last} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{'/enrollments/enrollmentList'(page=${students.last ? students.number : students.number + 1}, size=${students.size})}">
+                                    Next
+                                </a>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="~{fragments/layout :: scripts}"></div>
+</body>
+
+</html>
