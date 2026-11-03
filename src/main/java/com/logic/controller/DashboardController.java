@@ -41,4 +41,6 @@ public class DashboardController {
         model.addAttribute("students", enrollmentService.getRecentlyEnrolledStudents());
         return "dashboard";
     }
+
+
 }
